@@ -3,9 +3,9 @@
     <h1>Task Counter</h1>
     <div class="task-addition-container">
       <select v-model="newTaskPriority">
-        <option value="low">low</option>
-        <option value="medium">med</option>
-        <option value="high">high</option>
+        <option :class="{ low: true }" value="low">low</option>
+        <option :class="{ medium: true }" value="medium">med</option>
+        <option :class="{ high: true }" value="high">high</option>
       </select>
 
       <input
@@ -75,13 +75,13 @@
         :class="{ 'tasks-wrapper': true, 'is-done': task.isDone }"
         v-for="task in filteredTasks"
         :key="task.id"
-        @click="toggleTask(task)"
+        @click="toggleTask(task.id)"
       >
         <input
           type="checkbox"
           v-model="task.isDone"
           :checked="task.isDone"
-          @click="toggleTask(task)"
+          @click="toggleTask(task.id)"
         />
         <p
           :class="{
@@ -156,8 +156,11 @@ function removeTask(id) {
   });
 }
 
-function toggleTask(task) {
-  task.isDone = !task.isDone;
+function toggleTask(id) {
+  const task = tasks.value.find(t => t.id === id);
+  if (task) {
+    task.isDone = !task.isDone;
+  }
 }
 
 function setFilter(newFilterValue) {
@@ -224,6 +227,16 @@ function clearAllDone() {
   }
   select {
     border-style: none;
+    border-radius: 0.5rem;
+
+    option {
+      display: flex;
+      top: 10px;
+      border-radius: 0.5rem;
+      &:hover {
+        background-color: none;
+      }
+    }
   }
   input {
     border-radius: 0.5rem;
@@ -335,16 +348,16 @@ function clearAllDone() {
   }
 
   .low {
-    background-color: lightgreen;
+    background-color: #90ee90;
     color: lightgreen;
   }
   .medium {
-    background-color: lightyellow;
-    color: lightyellow;
+    background-color: #ffc964;
+    color: #ffc964;
   }
 
   .high {
-    background-color: lightcoral;
+    background-color: #f08080;
     color: lightcoral;
   }
 
