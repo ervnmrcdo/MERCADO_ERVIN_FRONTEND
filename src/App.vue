@@ -1,8 +1,8 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
-import TodoComponent from './components/TodoComponent.vue';
+import TaskCounter from './components/TaskCounter.vue';
 </script>
 
 <template>
-  <TodoComponent/>
+  <TaskCounter />
 </template>
