@@ -7,7 +7,7 @@
             Add Task
             </button>
         </div>
-         <span>current val: {{ taskName }}</span>
+         <span>Total Tasks: {{ totalTasks }} | Done: {{ totalFinishedTasks }} | Ongoing: {{ totalOngoingTasks }} </span>
 
         <div class="tasks-container" v-for="task in tasks">
             <div class="tasks-wrapper">
@@ -20,11 +20,15 @@
 </template>
 
 <script setup>
-import {ref, reactive} from "vue"
+import {ref, reactive, computed, watch} from "vue"
 
 const taskName = ref("")
 const tasks = ref([]);
 const filter = ref("all")
+const totalTasks = computed(() => {return tasks.value.length})
+const totalFinishedTasks = computed(() => {return tasks.value.filter((task) => task.isDone).length})
+const totalOngoingTasks = computed(() => {return totalTasks - totalOngoingTasks})
+
 
     function addTask(newTaskName){
         tasks.value.push({name: newTaskName, isDone: false})
@@ -32,7 +36,6 @@ const filter = ref("all")
     }
     
     function deleteTask(taskToBeDeleted){
-        console.log('deleting task')
         tasks.value = tasks.value.filter((task) => {task.name !== taskToBeDeleted})
     }
 
