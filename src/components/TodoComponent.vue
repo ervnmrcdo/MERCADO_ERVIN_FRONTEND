@@ -2,8 +2,8 @@
     <div class="todo-container">
         <h1>Task Counter</h1>
         <div>
-            <input type="text" v-model="taskName"  placeholder="Name" />
-            <button type="button" class="counter" @click="() => {addTask(taskName)}">
+            <input type="text" v-model="newTaskName"  placeholder="Name" />
+            <button type="button" class="counter" @click="() => {addTask(newTaskName)}">
             Add Task
             </button>
         </div>
@@ -22,7 +22,7 @@
 <script setup>
 import {ref, reactive, computed, watch} from "vue"
 
-const newtaskName = ref("")
+const newTaskName = ref("")
 const tasks = ref([]);
 const filter = ref("all")
 const totalTasks = computed(() => {return tasks.value.length})
@@ -32,7 +32,7 @@ const totalOngoingTasks = computed(() => {return tasks.value.filter((task) => !t
 
     function addTask(taskName){
         tasks.value.push({name: taskName, isDone: false})
-        taskName.value = ''
+        newTaskName.value = ""
     }
     
     function deleteTask(taskName){
