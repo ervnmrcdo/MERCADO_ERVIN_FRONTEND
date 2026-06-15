@@ -3,19 +3,46 @@
         <h1>Task Counter</h1>
         <div>
             <input type="text" v-model="newTaskName"  placeholder="Name" />
-            <button type="button" class="counter" @click="() => {addTask(newTaskName)}">
+            <button type="button" class="counter" @click="addTask" @keyup.enter="addTask">
             Add Task
             </button>
         </div>
-         <span>Total Tasks: {{ totalTasks }} | Done: {{ totalFinishedTasks }} | Ongoing: {{ totalOngoingTasks }} </span>
+         <span>Total Tasks: {{ totalCount }} | Done: {{ doneCount }} | Ongoing: {{ pendingCount }} </span>
 
-        <div class="tasks-container" v-for="task in tasks">
+        <div class="">
+            <button type="button" class="" @click="setFilter('all')">
+                All
+            </button>
+            <button type="button" class="" @click="setFilter('done')">
+                Done
+            </button>
+            <button type="button" class="" @click="setFilter('pending')">
+                Pending
+            </button>
+
+        </div>
+        
+        <div class="">
+            <button type="button" class="counter" @click="addTask">
+            Clear All Done
+            </button>
+        </div>
+
+
+        <div v-if="totalCount === 0" class="tasks-container">
             <div class="tasks-wrapper">
-                <input type="checkbox" value="task.isDone" :checked="task.isDone" @click="modifyStatus(task)"/>
-                <p>{{ task.name }}</p>
-                <button @click="deleteTask(task.name)">X</button>
+                <p class="empty">No tasks yet. Add one above!</p>
             </div>
         </div>
+
+        <div v-else="totalCount > 0" class="tasks-container" v-for="task in tasks" :key="task.id">
+            <div class="tasks-wrapper">
+                <input type="checkbox" v-model="task.isDone" :checked="task.isDone" @click="toggleTask(task)"/>
+                <p>{{ task.name }}</p>
+                <button @click="removeTask(task.id)">X</button>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -24,25 +51,40 @@ import {ref, reactive, computed, watch} from "vue"
 
 const newTaskName = ref("")
 const tasks = ref([]);
-const filter = ref("all")
-const totalTasks = computed(() => {return tasks.value.length})
-const totalFinishedTasks = computed(() => {return tasks.value.filter((task) => task.isDone).length})
-const totalOngoingTasks = computed(() => {return tasks.value.filter((task) => !task.isDone).length})
+const filteredTasks = ref([]);
+const filter = ref("all") // all | done | pending
+const taskId = ref(1)
 
 
-    function addTask(taskName){
-        tasks.value.push({name: taskName, isDone: false})
+const totalCount = computed(() => {return tasks.value.length})
+const doneCount = computed(() => {return tasks.value.filter((task) => task.isDone).length})
+const pendingCount = computed(() => {return tasks.value.filter((task) => !task.isDone).length})
+
+
+    function addTask(){
+        if (newTaskName === "") return;
+
+        tasks.value.push({id: taskId.value, name: newTaskName.value, isDone: false})
+        taskId.value = taskId.value + 1;
         newTaskName.value = ""
     }
     
-    function deleteTask(taskName){
-        tasks.value = tasks.value.filter((task) => {task.name !== taskName})
+    function removeTask (id){
+        tasks.value = tasks.value.filter((task) => {return task.id !== id})
     }
 
-    function modifyStatus(task) {
+    function toggleTask(task) {
         task.isDone = !task.isDone
     }
 
+    function setFilter(newFilterValue){
+        filter.value = newFilterValue
+
+    }
+
+    function clearAllDone(){ 
+
+    }
 
 
 </script>
