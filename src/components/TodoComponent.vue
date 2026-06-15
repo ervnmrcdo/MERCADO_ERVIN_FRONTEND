@@ -27,7 +27,7 @@ const tasks = ref([]);
 const filter = ref("all")
 const totalTasks = computed(() => {return tasks.value.length})
 const totalFinishedTasks = computed(() => {return tasks.value.filter((task) => task.isDone).length})
-const totalOngoingTasks = computed(() => {return totalTasks - totalOngoingTasks})
+const totalOngoingTasks = computed(() => {return tasks.value.filter((task) => !task.isDone).length})
 
 
     function addTask(newTaskName){
