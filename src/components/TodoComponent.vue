@@ -11,7 +11,7 @@
 
         <div class="tasks-container" v-for="task in tasks">
             <div class="tasks-wrapper">
-                <input type="checkbox" value="task.isDone"/>
+                <input type="checkbox" value="task.isDone" :checked="task.isDone" @click=""/>
                 <p>{{ task.name }}</p>
                 <button @click="deleteTask(task.name)">X</button>
             </div>
@@ -38,6 +38,8 @@ const totalOngoingTasks = computed(() => {return tasks.value.filter((task) => !t
     function deleteTask(taskToBeDeleted){
         tasks.value = tasks.value.filter((task) => {task.name !== taskToBeDeleted})
     }
+
+
 
 </script>
 
