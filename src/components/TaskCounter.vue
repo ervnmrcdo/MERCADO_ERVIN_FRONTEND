@@ -2,13 +2,19 @@
   <div class="todo-container">
     <h1>Task Counter</h1>
     <div class="task-addition-container">
-      <input type="text" v-model="newTaskName" placeholder="Task Name..." />
-      <button
-        type="button"
-        class="add-task-button"
-        @click="addTask"
+      <select v-model="newTaskPriority">
+        <option value="low">low</option>
+        <option value="medium">med</option>
+        <option value="high">high</option>
+      </select>
+
+      <input
+        type="text"
+        v-model="newTaskName"
+        placeholder="Task Name..."
         @keyup.enter="addTask"
-      >
+      />
+      <button type="button" class="add-task-button" @click="addTask">
         Add Task
       </button>
     </div>
@@ -57,7 +63,7 @@
       <p class="empty">No finished tasks yet. Complete one!</p>
     </div>
     <div
-      v-else-if="filter === 'pending' && doneCount === 0"
+      v-else-if="filter === 'pending' && pendingCount === 0"
       class="empty-tasks-container"
       s
     >
@@ -65,18 +71,26 @@
     </div>
 
     <div v-else class="tasks-container">
-      <div class="tasks-wrapper" v-for="task in filteredTasks" :key="task.id">
+      <div
+        :class="{ 'tasks-wrapper': true, 'is-done': task.isDone }"
+        v-for="task in filteredTasks"
+        :key="task.id"
+        @click="toggleTask(task)"
+      >
         <input
           type="checkbox"
           v-model="task.isDone"
           :checked="task.isDone"
           @click="toggleTask(task)"
         />
-        <select type="dropdown">
-          <option value="low">low</option>
-          <option value="medium">med</option>
-          <option value="high">high</option>
-        </select>
+        <p
+          :class="{
+            badge: true,
+            low: task.priority === 'low',
+            medium: task.priority === 'medium',
+            high: task.priority === 'high',
+          }"
+        ></p>
         <p :class="{ striked: task.isDone }">{{ task.name }}</p>
         <button class="delete-button" @click="removeTask(task.id)">X</button>
       </div>
@@ -124,7 +138,7 @@ const pendingCount = computed(() => {
 });
 
 function addTask() {
-  if (newTaskName === "") return;
+  if (!newTaskName.value.trim()) return;
 
   tasks.value.push({
     id: taskId.value,
@@ -134,7 +148,6 @@ function addTask() {
   });
   taskId.value = taskId.value + 1;
   newTaskName.value = "";
-  console.log(tasks.value);
 }
 
 function removeTask(id) {
@@ -185,8 +198,9 @@ function clearAllDone() {
   border-style: solid;
   padding: 40px 3px;
   border-radius: 2rem;
-  margin-top: 45px;
-  min-height: 500px;
+  margin-top: 33px;
+  min-height: 600px;
+  max-height: 600px;
   background: #0d0b17;
   background: linear-gradient(
     30deg,
@@ -215,7 +229,12 @@ function clearAllDone() {
     border-radius: 0.5rem;
     border-style: solid;
     opacity: calc(75%);
-    min-width: 250px;
+    padding-left: 10px;
+  }
+
+  select {
+    padding: 5px 9px;
+    padding-right: 7px;
   }
 }
 
@@ -269,50 +288,93 @@ function clearAllDone() {
 .tasks-container {
   justify-self: center;
   align-self: center;
+  justify-items: center;
   margin-top: 10px;
   border-style: none;
   min-width: 600px;
   min-height: 300px;
   max-height: 300px;
   overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .tasks-wrapper {
   justify-items: center;
   align-items: center;
   justify-content: left;
+  align-content: center;
   display: flex;
   flex-direction: row;
   border-style: solid;
   padding: 5px;
   border-width: 1px;
   border-radius: 0.5rem;
-  padding: 20px 0px;
+  padding: 9px 0px;
   min-width: 75%;
+  max-width: 75%;
   margin-bottom: 10px;
 
   input {
     margin-left: 30px;
     margin-right: 30px;
     border-radius: 0%;
+    align-self: center;
     border-color: transparent;
   }
 
   p.badge {
     border-style: solid;
     border-radius: 0.7rem;
-    padding: 3px 7px;
-    font-size: 10px;
+    padding: 1px 7px;
+    font-size: 5px;
     border-width: 0.5px;
-    min-width: 10px;
+    min-width: 11px;
+    min-height: 10px;
+    max-height: 10px;
     margin-right: 30px;
   }
 
-  select {
-    margin-right: 30px;
+  .low {
+    background-color: lightgreen;
+    color: lightgreen;
+  }
+  .medium {
+    background-color: lightyellow;
+    color: lightyellow;
+  }
+
+  .high {
+    background-color: lightcoral;
+    color: lightcoral;
+  }
+
+  p {
+    min-width: 55%;
+    max-width: 55%;
+    text-align: left;
+    overflow-wrap: break-word;
   }
 
   .delete-button {
+    display: flex;
+    align-self: flex-end;
+    border-radius: 4px;
+    color: #08060d;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: var(--accent);
+    background: var(--accent-bg);
+    border: 0.5px solid transparent;
+    transition: border-color 0.3s;
+
+    &:hover {
+      border-color: var(--accent-border);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
   }
 
   p {
@@ -323,15 +385,19 @@ function clearAllDone() {
   }
 }
 
+.is-done {
+  background-color: black;
+  opacity: calc(25%);
+}
+
 .clear-all-button {
   display: inline-flex;
   border-radius: 4px;
-  color: #08060d;
+  color: #83e6ab;
   font-size: 16px;
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
+  background: #0a4f2f;
   border: 2px solid transparent;
   transition: border-color 0.3s;
   margin-top: 10px;
