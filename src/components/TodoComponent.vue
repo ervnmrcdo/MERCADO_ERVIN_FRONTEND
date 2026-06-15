@@ -9,7 +9,7 @@
         </div>
          <span>Total Tasks: {{ totalCount }} | Done: {{ doneCount }} | Ongoing: {{ pendingCount }} </span>
 
-        <div class="">
+        <div class="filter-settings">
             <button type="button" class="" @click="setFilter('all')">
                 All
             </button>
@@ -29,13 +29,13 @@
         </div>
 
 
-        <div v-if="totalCount === 0" class="tasks-container">
+        <div v-if="(totalCount === 0) || (filter === 'done' && doneCount === 0) || (filter === 'pending' && pendingCount === 0)" class="tasks-container">
             <div class="tasks-wrapper">
                 <p class="empty">No tasks yet. Add one above!</p>
             </div>
         </div>
 
-        <div v-else="totalCount > 0" class="tasks-container" v-for="task in tasks" :key="task.id">
+        <div v-else="totalCount > 0" class="tasks-container" v-for="task in filteredTasks" :key="task.id">
             <div class="tasks-wrapper">
                 <input type="checkbox" v-model="task.isDone" :checked="task.isDone" @click="toggleTask(task)"/>
                 <p>{{ task.name }}</p>
@@ -51,7 +51,15 @@ import {ref, reactive, computed, watch} from "vue"
 
 const newTaskName = ref("")
 const tasks = ref([]);
-const filteredTasks = ref([]);
+const filteredTasks = computed(() => {
+    if (filter.value === "all"){
+        return tasks.value
+    }else if (filter.value === "done"){
+        return tasks.value.filter((task) => {return task.isDone})
+    }else{ 
+        return tasks.value.filter((task) => {return !task.isDone})
+    }
+});
 const filter = ref("all") // all | done | pending
 const taskId = ref(1)
 
@@ -92,7 +100,10 @@ const pendingCount = computed(() => {return tasks.value.filter((task) => !task.i
 <style lang="scss" scoped>
 
 .todo-container{
+    justify-self: center;
     display: block;
+    max-width: 40%px;
+    border-style: solid;
 }
 
 .tasks-container{
@@ -108,4 +119,5 @@ const pendingCount = computed(() => {return tasks.value.filter((task) => !task.i
     padding: 5px;
     border-width: 1px;
 }
+
 </style>
