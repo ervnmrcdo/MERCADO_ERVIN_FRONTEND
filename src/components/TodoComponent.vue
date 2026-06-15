@@ -22,8 +22,8 @@
 
         </div>
         
-        <div class="">
-            <button type="button" class="counter" @click="addTask">
+        <div v-if="doneCount > 0"  class="">
+            <button type="button" class="counter" @click="clearAllDone">
             Clear All Done
             </button>
         </div>
@@ -83,7 +83,7 @@ const pendingCount = computed(() => {return tasks.value.filter((task) => !task.i
     }
 
     function clearAllDone(){ 
-
+        tasks.value = tasks.value.filter(task => !task.isDone)
     }
 
 
