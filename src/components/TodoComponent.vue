@@ -11,7 +11,7 @@
 
         <div class="tasks-container" v-for="task in tasks">
             <div class="tasks-wrapper">
-                <input type="checkbox" value="task.isDone" :checked="task.isDone" @click=""/>
+                <input type="checkbox" value="task.isDone" :checked="task.isDone" @click="modifyStatus(task)"/>
                 <p>{{ task.name }}</p>
                 <button @click="deleteTask(task.name)">X</button>
             </div>
@@ -22,7 +22,7 @@
 <script setup>
 import {ref, reactive, computed, watch} from "vue"
 
-const taskName = ref("")
+const newtaskName = ref("")
 const tasks = ref([]);
 const filter = ref("all")
 const totalTasks = computed(() => {return tasks.value.length})
@@ -30,13 +30,17 @@ const totalFinishedTasks = computed(() => {return tasks.value.filter((task) => t
 const totalOngoingTasks = computed(() => {return tasks.value.filter((task) => !task.isDone).length})
 
 
-    function addTask(newTaskName){
-        tasks.value.push({name: newTaskName, isDone: false})
+    function addTask(taskName){
+        tasks.value.push({name: taskName, isDone: false})
         taskName.value = ''
     }
     
-    function deleteTask(taskToBeDeleted){
-        tasks.value = tasks.value.filter((task) => {task.name !== taskToBeDeleted})
+    function deleteTask(taskName){
+        tasks.value = tasks.value.filter((task) => {task.name !== taskName})
+    }
+
+    function modifyStatus(task) {
+        task.isDone = !task.isDone
     }
 
 
