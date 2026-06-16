@@ -71,32 +71,34 @@
     </div>
 
     <div v-else class="tasks-container">
-      <div
-        :class="{ 'tasks-wrapper': true, 'is-done': task.isDone }"
-        v-for="task in filteredTasks"
-        :key="task.id"
-        @click="toggleTask(task.id)"
-      >
-        <input
-          type="checkbox"
-          v-model="task.isDone"
-          :checked="task.isDone"
+      <!-- <TransitionGroup name="list" tag="div"> -->
+        <div
+          :class="{ 'tasks-wrapper': true, 'is-done': task.isDone }"
+          v-for="task in filteredTasks"
+          :key="task.id"
           @click="toggleTask(task.id)"
-        />
-        <p
-          :class="{
-            badge: true,
-            low: task.priority === 'low',
-            medium: task.priority === 'medium',
-            high: task.priority === 'high',
-          }"
-        ></p>
-        <p :class="{ striked: task.isDone }">{{ task.name }}</p>
-        <button class="delete-button" @click="removeTask(task.id)">X</button>
-      </div>
+        >
+          <input
+            type="checkbox"
+            v-model="task.isDone"
+            :checked="task.isDone"
+            @click="toggleTask(task.id)"
+          />
+          <p
+            :class="{
+              badge: true,
+              low: task.priority === 'low',
+              medium: task.priority === 'medium',
+              high: task.priority === 'high',
+            }"
+          ></p>
+          <p :class="{ striked: task.isDone }">{{ task.name }}</p>
+          <button class="delete-button" @click="removeTask(task.id)">X</button>
+        </div>
+      <!-- </TransitionGroup> -->
     </div>
 
-    <div v-if="doneCount > 0" class="">
+    <div v-if="doneCount > 0 && filter !== 'pending'" class="">
       <button type="button" class="clear-all-button" @click="clearAllDone">
         Clear All Done
       </button>
@@ -157,7 +159,7 @@ function removeTask(id) {
 }
 
 function toggleTask(id) {
-  const task = tasks.value.find(t => t.id === id);
+  const task = tasks.value.find((t) => t.id === id);
   if (task) {
     task.isDone = !task.isDone;
   }
@@ -173,6 +175,24 @@ function clearAllDone() {
 </script>
 
 <style lang="scss" scoped>
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 1s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+}
+
 .add-task-button {
   display: inline-flex;
   border-radius: 4px;
