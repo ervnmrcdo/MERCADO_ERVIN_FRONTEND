@@ -12,6 +12,11 @@
         type="text"
         v-model="newTaskName"
         placeholder="Task Name..."
+        :class="{
+          'border-low': newTaskPriority === 'low',
+          'border-medium': newTaskPriority === 'medium',
+          'border-high': newTaskPriority === 'high',
+        }"
         @keyup.enter="addTask"
       />
       <button type="button" class="add-task-button" @click="addTask">
@@ -70,33 +75,33 @@
       <p class="empty">No pending tasks yet. Add one above!</p>
     </div>
 
-    <div v-else class="tasks-container">
-      <!-- <TransitionGroup name="list" tag="div"> -->
-        <div
-          :class="{ 'tasks-wrapper': true, 'is-done': task.isDone }"
-          v-for="task in filteredTasks"
-          :key="task.id"
+    <!-- <div v-else class="tasks-container"> -->
+    <TransitionGroup v-else class="tasks-container" name="list" tag="div">
+      <div
+        :class="{ 'tasks-wrapper': true, 'is-done': task.isDone }"
+        v-for="task in filteredTasks"
+        :key="task.id"
+        @click="toggleTask(task.id)"
+      >
+        <input
+          type="checkbox"
+          v-model="task.isDone"
+          :checked="task.isDone"
           @click="toggleTask(task.id)"
-        >
-          <input
-            type="checkbox"
-            v-model="task.isDone"
-            :checked="task.isDone"
-            @click="toggleTask(task.id)"
-          />
-          <p
-            :class="{
-              badge: true,
-              low: task.priority === 'low',
-              medium: task.priority === 'medium',
-              high: task.priority === 'high',
-            }"
-          ></p>
-          <p :class="{ striked: task.isDone }">{{ task.name }}</p>
-          <button class="delete-button" @click="removeTask(task.id)">X</button>
-        </div>
-      <!-- </TransitionGroup> -->
-    </div>
+        />
+        <p
+          :class="{
+            badge: true,
+            low: task.priority === 'low',
+            medium: task.priority === 'medium',
+            high: task.priority === 'high',
+          }"
+        ></p>
+        <p :class="{ striked: task.isDone }">{{ task.name }}</p>
+        <button class="delete-button" @click="removeTask(task.id)">X</button>
+      </div>
+    </TransitionGroup>
+    <!-- </div> -->
 
     <div v-if="doneCount > 0 && filter !== 'pending'" class="">
       <button type="button" class="clear-all-button" @click="clearAllDone">
@@ -175,22 +180,16 @@ function clearAllDone() {
 </script>
 
 <style lang="scss" scoped>
-.list-move, /* apply transition to moving elements */
+.list-move,
 .list-enter-active,
 .list-leave-active {
-  transition: all 1s ease;
+  transition: all 0.3s ease;
 }
 
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
   transform: translateX(30px);
-}
-
-/* ensure leaving items are taken out of layout flow so that moving
-   animations can be calculated correctly. */
-.list-leave-active {
-  position: absolute;
 }
 
 .add-task-button {
@@ -257,6 +256,8 @@ function clearAllDone() {
         background-color: none;
       }
     }
+
+ 
   }
   input {
     border-radius: 0.5rem;
@@ -270,6 +271,16 @@ function clearAllDone() {
     padding-right: 7px;
   }
 }
+
+   .border-low {
+      border-color: green;
+    }
+    .border-medium {
+      border-color: yellow;
+    }
+    .border-high {
+      border-color: red;
+    }
 
 .stats-container {
   border-style: solid;
