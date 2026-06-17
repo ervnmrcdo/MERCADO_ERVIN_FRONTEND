@@ -1,5 +1,4 @@
 <template>
-  <NavBar/>
   <div class="todo-container">
     <h1>Task Counter</h1>
     <div class="task-addition-container">

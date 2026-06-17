@@ -24,10 +24,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-/* 
+
   @media (max-width: 1024px) {
     font-size: 16px;
-  } */
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -157,7 +157,7 @@ code {
 }
 
 #app {
-  width: 1126px;
+  /* width: 1126px; */
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -293,4 +293,5 @@ code {
     right: 0;
     border-right-color: var(--border);
   }
+  
 }

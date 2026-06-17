@@ -34,7 +34,6 @@ function handleDelete(id) {
 </script>
 
 <template>
-  <NavBar/>
   <div class="task-list-view">
     <h1>My Tasks</h1>
   <div v-if="tasks.length === 0">
