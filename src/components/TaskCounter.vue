@@ -1,4 +1,5 @@
 <template>
+  <NavBar/>
   <div class="todo-container">
     <h1>Task Counter</h1>
     <div class="task-addition-container">
@@ -113,6 +114,7 @@
 
 <script setup>
 import { ref, reactive, computed, watch } from "vue";
+import NavBar from "./NavBar.vue";
 
 const newTaskName = ref("");
 const newTaskPriority = ref("low");
@@ -215,6 +217,7 @@ function clearAllDone() {
 
 .todo-container {
   align-self: center;
+  justify-self: center;
   display: block;
   min-width: 70%;
   border-style: solid;
@@ -223,6 +226,7 @@ function clearAllDone() {
   margin-top: 33px;
   min-height: 600px;
   max-height: 600px;
+  max-width: 75%;
   background: #0d0b17;
   background: linear-gradient(
     30deg,

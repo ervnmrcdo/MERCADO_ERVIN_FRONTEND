@@ -7,6 +7,7 @@
 <script setup>
 import { ref } from "vue";
 import TaskCard from "./TaskCard.vue";
+import NavBar from "./NavBar.vue";
 
 // TODO 1: Create a ref() tasks array with at least 3 sample tasks
 // Each task: { id, name, done, dueDate }
@@ -33,6 +34,7 @@ function handleDelete(id) {
 </script>
 
 <template>
+  <NavBar/>
   <div class="task-list-view">
     <h1>My Tasks</h1>
   <div v-if="tasks.length === 0">
