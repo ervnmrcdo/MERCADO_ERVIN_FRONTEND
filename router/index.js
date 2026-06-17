@@ -1,11 +1,11 @@
-import { createMemoryHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter } from 'vue-router'
 
-import HomeView from './HomeView.vue'
-import AboutView from './AboutView.vue'
+import TaskCounter from '../src/components/TaskCounter.vue'
+import TaskListView from '../src/components/TaskListView.vue'
 
 const routes = [
-  { path: '/', component: HomeView },
-  { path: '/about', component: AboutView },
+  { path: '/task-counter', component: TaskCounter  },
+  { path: '/task-list', component: TaskListView },
 ]
 
 export const router = createRouter({
