@@ -5,7 +5,9 @@
         Task Counter
       </li>
       <li :class="{ 'navbar-items': true }" @click="goToTaskList">Task List</li>
-      <li :class="{ 'navbar-items': true }" @click="goToTaskListSpecificView">Task List Specific View</li>
+      <li :class="{ 'navbar-items': true }" @click="goToTaskListSpecificView">
+        Task List Specific View
+      </li>
     </ul>
   </div>
 </template>
@@ -25,7 +27,6 @@ function goToTaskList() {
 function goToTaskListSpecificView() {
   router.push("/task-list-specific-view");
 }
-
 </script>
 
 <style scoped>

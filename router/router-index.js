@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 import { useTaskStore } from "../src/stores/taskStore.js";
-import TaskCounter from "../src/components/TaskCounter.vue";
+import TaskCounter from "../src/views/TaskCounter.vue";
 import TaskDetailView from "../src/views/TaskDetailView.vue";
 import AboutView from "../src/views/AboutView.vue";
 import TaskListView from "../src/views/TaskListView.vue";

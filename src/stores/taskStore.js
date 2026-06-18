@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 
 export const useTaskStore = defineStore("main", {
   state: () => ({
@@ -20,30 +19,19 @@ export const useTaskStore = defineStore("main", {
     pendingCount(state) {
       return state.tasks.filter((task) => !task.done).length;
     },
-    filteredTasks(state) {
-      console.log(state.filter);
-      if (state.filter === "all") {
-        return state.tasks;
-      } else if (state.filter === "done") {
-        return state.tasks.filter((task) => {
-          return task.done;
-        });
-      } else {
-        return state.tasks.filter((task) => {
-          return !task.done;
-        });
-      }
-    },
+
   },
 
   actions: {
-    addTask(state, newTask) {
-      if (!this.newTaskName.trim()) return;
+    addTask(userName) {
+      console.log(userName);
+      if (!this.newTaskName.trim() && !userName) return;
       this.tasks.push({
         id: this.taskId,
         name: this.newTaskName,
-        isDone: false,
+        done: false,
         priority: this.newTaskPriority,
+        by: userName,
       });
       this.taskId += 1;
       this.newTaskName = "";
@@ -61,7 +49,6 @@ export const useTaskStore = defineStore("main", {
 
     toggleTask(id) {
       const task = this.tasks.find((t) => t.id === id);
-      console.log(task);
       if (task) {
         task.done = !task.done;
       }
@@ -76,4 +63,5 @@ export const useTaskStore = defineStore("main", {
       this.filter = newFilterValue;
     },
   },
+  persist: true,
 });

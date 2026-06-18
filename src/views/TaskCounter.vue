@@ -1,4 +1,12 @@
 <template>
+  <!-- <div>
+    <input v-model="usernameInput" type="text" />
+    <button @click="login(usernameInput)">login</button>
+  </div> -->
+  <div class="login-dialog">
+    <LoginDialog />
+  </div>
+
   <div class="todo-container">
     <h1>Task Counter</h1>
     <div class="task-addition-container">
@@ -17,17 +25,15 @@
           'border-medium': newTaskPriority === 'medium',
           'border-high': newTaskPriority === 'high',
         }"
-        @keyup.enter="addTask"
+        @keyup.enter="addTask(currentUser.name)"
       />
-      <button type="button" class="add-task-button" @click="addTask">
+      <button
+        type="button"
+        class="add-task-button"
+        @click="addTask(currentUser.name)"
+      >
         Add Task
       </button>
-    </div>
-    <div class="stats-container">
-      <span class="stats"
-        >Total Tasks: {{ totalCount }} | Done: {{ doneCount }} | Ongoing:
-        {{ pendingCount }}
-      </span>
     </div>
 
     <div class="filter-settings">
@@ -36,14 +42,14 @@
         :class="{ 'filter-button': true, selected: filter === 'all' }"
         @click="setFilter('all')"
       >
-        All
+        All ({{ totalCount }})
       </button>
       <button
         type="button"
         :class="{ 'filter-button': true, selected: filter === 'done' }"
         @click="setFilter('done')"
       >
-        Done
+        Done ({{ doneCount }})
       </button>
       <button
         type="button"
@@ -51,7 +57,7 @@
         :class="{ selected: filter === 'pending' }"
         @click="setFilter('pending')"
       >
-        Pending
+        Pending ({{ pendingCount }})
       </button>
     </div>
 
@@ -114,14 +120,14 @@
 <script setup>
 import { ref, reactive, computed, watch } from "vue";
 import { useTaskStore } from "../stores/taskStore.js";
+import { useUserStore } from "../stores/userStore.ts";
 import { storeToRefs } from "pinia";
-import NavBar from "./NavBar.vue";
+import LoginDialog from "../components/LoginDialog.vue";
 
-// const newTaskName = ref("");
-// const newTaskPriority = ref("low");
-// const tasks = ref([]);
-// const filter = ref("all"); // all | done | pending
-// const taskId = ref(1);
+const userStore = useUserStore();
+const { currentUser, usernameInput, userList, isLoggedIn } =
+  storeToRefs(userStore);
+const { login, logout } = userStore;
 
 const taskStore = useTaskStore();
 const {
@@ -133,74 +139,34 @@ const {
   doneCount,
   totalCount,
   pendingCount,
-  filteredTasks,
 } = storeToRefs(taskStore);
-const {setFilter, addTask, removeTask, toggleTask, clearAllDone} = taskStore
+const { setFilter, addTask, removeTask, toggleTask, clearAllDone } = taskStore;
 
-console.log(filteredTasks.value)
-// console.log
-// console.log(tasks.value.length)
-
-// const filteredTasks = computed(() => {
-//   if (filter.value === "all") {
-//     return tasks.value;
-//   } else if (filter === "done") {
-//     return tasks.value.filter((task) => {
-//       return task.done;
-//     });
-//   } else {
-//     return tasks.value.filter((task) => {
-//       return !task.done;
-//     });
-//   }
-// });
-
-// const totalCount = computed(() => {
-//   return tasks.value.length;
-// });
-// const doneCount = computed(() => {
-//   return tasks.value.filter((task) => task.done).length;
-// });
-// const pendingCount = computed(() => {
-//   return tasks.value.filter((task) => !task.done).length;
-// });
-
-// function addTask() {
-//   if (!newTaskName.value.trim()) return;
-
-//   tasks.value.push({
-//     id: taskId.value,
-//     name: newTaskName.value,
-//     isDone: false,
-//     priority: newTaskPriority.value,
-//   });
-//   taskId.value = taskId.value + 1;
-//   newTaskName.value = "";
-// }
-
-// function removeTask(id) {
-//   tasks.value = tasks.value.filter((task) => {
-//     return task.id !== id;
-//   });
-// }
-
-// function toggleTask(id) {
-//   const task = tasks.value.find((t) => t.id === id);
-//   if (task) {
-//     task.isDone = !task.isDone;
-//   }
-// }
-
-// function setFilter(newFilterValue) {
-//   filter.value = newFilterValue;
-// }
-
-// function clearAllDone() {
-//   tasks.value = tasks.value.filter((task) => !task.done);
-// }
+function filteredTasks(userName) {
+  if (filter.value === "all") {
+    return tasks.value.filter((task) => {
+      return task.by === userName;
+    });
+  } else if (filter.value === "done") {
+    return tasks.value.filter((task) => {
+      return task.done && task.by === userName;
+    });
+  } else {
+    return tasks.value.filter((task) => {
+      return !task.done && task.by === userName;
+    });
+  }
+}
 </script>
 
 <style lang="scss" scoped>
+.login-dialog {
+  z-index: 100;
+  position: absolute;
+  // display: flex;
+  // justify-self: center;
+}
+
 .list-move,
 .list-enter-active,
 .list-leave-active {
