@@ -15,11 +15,11 @@ export const useUserStore = defineStore("login-store", {
 
   actions: {
     login(name:String) {
-      const user = this.userList.find((user) => user.name === name);
+      const user = this.userList.find((user) => user.name === name.toLowerCase());
       if (user) {
         this.currentUser = user;
       } else {
-        const newUser = new Object({name: name})
+        const newUser = new Object({name: name.toLowerCase()});
         this.userList.push(newUser)
         this.currentUser = newUser;
         }

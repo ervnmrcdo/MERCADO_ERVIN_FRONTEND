@@ -3,11 +3,11 @@
     <input v-model="usernameInput" type="text" />
     <button @click="login(usernameInput)">login</button>
   </div> -->
-  <div class="login-dialog">
+  <div v-if="!isLoggedIn" class="login-dialog">
     <LoginDialog />
   </div>
 
-  <div class="todo-container">
+  <div v-if="isLoggedIn" class="todo-container">
     <h1>Task Counter</h1>
     <div class="task-addition-container">
       <select v-model="newTaskPriority">
@@ -28,7 +28,7 @@
         @keyup.enter="addTask(currentUser.name)"
       />
       <button
-        type="button"
+      type="button"
         class="add-task-button"
         @click="addTask(currentUser.name)"
       >
@@ -85,7 +85,7 @@
     <TransitionGroup v-else class="tasks-container" name="list" tag="div">
       <div
         :class="{ 'tasks-wrapper': true, 'is-done': task.done }"
-        v-for="task in filteredTasks"
+        v-for="task in filteredTasks(currentUser.name)"
         :key="task.id"
         @click="toggleTask(task.id)"
       >
@@ -136,9 +136,9 @@ const {
   newTaskName,
   newTaskPriority,
   filter,
-  doneCount,
-  totalCount,
-  pendingCount,
+  // doneCount,
+  // totalCount,
+  // pendingCount,
 } = storeToRefs(taskStore);
 const { setFilter, addTask, removeTask, toggleTask, clearAllDone } = taskStore;
 
@@ -157,14 +157,24 @@ function filteredTasks(userName) {
     });
   }
 }
+
+const userTasks = computed(() => 
+  tasks.value.filter(t => t.by === currentUser.value?.name)
+);
+const totalCount = computed(() => userTasks.value.length);
+const doneCount = computed(() => userTasks.value.filter(t => t.done).length);
+const pendingCount = computed(() => userTasks.value.filter(t => !t.done).length);
+
 </script>
 
 <style lang="scss" scoped>
 .login-dialog {
-  z-index: 100;
-  position: absolute;
-  // display: flex;
-  // justify-self: center;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .list-move,

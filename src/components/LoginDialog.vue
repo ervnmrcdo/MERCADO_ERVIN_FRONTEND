@@ -17,8 +17,9 @@ import { useUserStore } from "../stores/userStore.ts";
 import { storeToRefs } from "pinia";
 
 const userStore = useUserStore();
-const { currentUser, usernameInput, userList, isLoggedIn } = storeToRefs(userStore);
-const { login, logout} = userStore;
+const { currentUser, usernameInput, userList, isLoggedIn } =
+  storeToRefs(userStore);
+const { login, logout } = userStore;
 
 console.log(currentUser.value);
 </script>
@@ -26,12 +27,12 @@ console.log(currentUser.value);
 <style lang="scss" scoped>
 .login-dialog-container {
   border-style: solid;
-  width: 50%;
-  min-height: 80%;
-  justify-self: center;
-  padding: 20px 10px;
-  margin: 10px;
+  padding: 30px 40px;
   border-radius: 2rem;
-  
+  background: #0d0b17;
+}
+
+input {
+  width: 10;
 }
 </style>

@@ -8,12 +8,21 @@
       <li :class="{ 'navbar-items': true }" @click="goToTaskListSpecificView">
         Task List Specific View
       </li>
+      <li :class="{ 'navbar-items': true }" @click="logout">
+        Logout
+      </li>
     </ul>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
+import { useUserStore } from "../stores/userStore.ts";
+import { storeToRefs } from "pinia";
+
+const userStore = useUserStore();
+const { logout } = userStore;
+
 
 const router = useRouter();
 

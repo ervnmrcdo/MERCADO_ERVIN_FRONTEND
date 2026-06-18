@@ -43,9 +43,6 @@ export const useTaskStore = defineStore("main", {
       });
     },
 
-    setFilter(newFilterValue) {
-      this.filter.value = newFilterValue;
-    },
 
     toggleTask(id) {
       const task = this.tasks.find((t) => t.id === id);
