@@ -6,7 +6,7 @@ import TaskCounter from "./components/TaskCounter.vue";
 
 <template>
   <main>
-    <!-- <NavBar class="navbar"/> -->
+    <NavBar class="navbar"/>
     <RouterView />
   </main> 
 </template>

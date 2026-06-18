@@ -6,8 +6,8 @@
 -->
 <script setup>
 import { ref } from "vue";
-import TaskCard from "./TaskCard.vue";
-import NavBar from "./NavBar.vue";
+import TaskCard from "../components/TaskCard.vue";
+import NavBar from "../components/NavBar.vue";
 
 // TODO 1: Create a ref() tasks array with at least 3 sample tasks
 // Each task: { id, name, done, dueDate }

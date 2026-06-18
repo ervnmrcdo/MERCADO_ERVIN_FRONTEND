@@ -1,31 +1,18 @@
 import { createWebHistory, createRouter } from "vue-router";
-import TaskCounter from "../src/components/TaskCounter.vue";
-import TaskListView from "../src/components/TaskListView.vue";
-import HomeView from "../src/components/HomeView.vue";
-import TaskDetailView from "../src/components/TaskDetailView.vue";
-import AboutView from "../src/components/AboutView.vue";
 import { useTaskStore } from "../src/stores/taskStore.js";
-
-// const routes = [
-// TODO 3: Add a redirect from '/' to '/home'
-// { path: '/', redirect: '/home' },
-
-// TODO 4: Add the /home route
-// { path: '/home', component: HomeView },
-
-// TODO 5: Add the /task/:id dynamic route
-// Add meta: { requiresTask: true } so the guard knows to protect it
-// { path: '/task/:id', component: TaskDetailView, meta: { requiresTask: true } },
-
-// TODO 6: Add the /about route
-// { path: '/about', component: AboutView },
-// ]
+import TaskCounter from "../src/components/TaskCounter.vue";
+import TaskDetailView from "../src/views/TaskDetailView.vue";
+import AboutView from "../src/views/AboutView.vue";
+import TaskListView from "../src/views/TaskListView.vue";
+import TaskListSpecficView from "../src/views/TaskListSpecficView.vue";
+import HomeView from "../src/views/HomeView.vue";
 
 const routes = [
   { path: "/", component: HomeView },
   { path: "/home", component: HomeView },
   { path: "/task-counter", component: TaskCounter },
   { path: "/task-list", component: TaskListView },
+  { path: "/task-list-specific-view", component: TaskListSpecficView },
   {
     path: "/task/:id",
     component: TaskDetailView,
@@ -33,12 +20,6 @@ const routes = [
   },
   { path: "/about", component: AboutView },
 ];
-
-// TODO 8: Add a beforeEach navigation guard
-// - Check if to.meta.requiresTask is true
-// - If so, get the task store and check if a task with to.params.id exists
-// - If NOT found: next({ path: '/home', query: { error: 'notfound' } })
-// - If found (or not a protected route): next()
 
 const router = createRouter({
   history: createWebHistory(),
