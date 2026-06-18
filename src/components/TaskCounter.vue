@@ -78,15 +78,15 @@
     <!-- <div v-else class="tasks-container"> -->
     <TransitionGroup v-else class="tasks-container" name="list" tag="div">
       <div
-        :class="{ 'tasks-wrapper': true, 'is-done': task.isDone }"
+        :class="{ 'tasks-wrapper': true, 'is-done': task.done }"
         v-for="task in filteredTasks"
         :key="task.id"
         @click="toggleTask(task.id)"
       >
         <input
           type="checkbox"
-          v-model="task.isDone"
-          :checked="task.isDone"
+          v-model="task.done"
+          :checked="task.done"
           @click="toggleTask(task.id)"
         />
         <p
@@ -97,7 +97,7 @@
             high: task.priority === 'high',
           }"
         ></p>
-        <p :class="{ striked: task.isDone }">{{ task.name }}</p>
+        <p :class="{ striked: task.done }">{{ task.name }}</p>
         <button class="delete-button" @click="removeTask(task.id)">X</button>
       </div>
     </TransitionGroup>
@@ -113,71 +113,91 @@
 
 <script setup>
 import { ref, reactive, computed, watch } from "vue";
+import { useTaskStore } from "../stores/taskStore.js";
+import { storeToRefs } from "pinia";
 import NavBar from "./NavBar.vue";
 
-const newTaskName = ref("");
-const newTaskPriority = ref("low");
-const tasks = ref([]);
-const filter = ref("all"); // all | done | pending
-const taskId = ref(1);
+// const newTaskName = ref("");
+// const newTaskPriority = ref("low");
+// const tasks = ref([]);
+// const filter = ref("all"); // all | done | pending
+// const taskId = ref(1);
 
-const filteredTasks = computed(() => {
-  if (filter.value === "all") {
-    return tasks.value;
-  } else if (filter.value === "done") {
-    return tasks.value.filter((task) => {
-      return task.isDone;
-    });
-  } else {
-    return tasks.value.filter((task) => {
-      return !task.isDone;
-    });
-  }
-});
+const taskStore = useTaskStore();
+const {
+  tasks,
+  taskId,
+  newTaskName,
+  newTaskPriority,
+  filter,
+  doneCount,
+  totalCount,
+  pendingCount,
+  filteredTasks,
+} = storeToRefs(taskStore);
+const {setFilter, addTask, removeTask, toggleTask, clearAllDone} = taskStore
 
-const totalCount = computed(() => {
-  return tasks.value.length;
-});
-const doneCount = computed(() => {
-  return tasks.value.filter((task) => task.isDone).length;
-});
-const pendingCount = computed(() => {
-  return tasks.value.filter((task) => !task.isDone).length;
-});
+console.log(filteredTasks.value)
+// console.log
+// console.log(tasks.value.length)
 
-function addTask() {
-  if (!newTaskName.value.trim()) return;
+// const filteredTasks = computed(() => {
+//   if (filter.value === "all") {
+//     return tasks.value;
+//   } else if (filter === "done") {
+//     return tasks.value.filter((task) => {
+//       return task.done;
+//     });
+//   } else {
+//     return tasks.value.filter((task) => {
+//       return !task.done;
+//     });
+//   }
+// });
 
-  tasks.value.push({
-    id: taskId.value,
-    name: newTaskName.value,
-    isDone: false,
-    priority: newTaskPriority.value,
-  });
-  taskId.value = taskId.value + 1;
-  newTaskName.value = "";
-}
+// const totalCount = computed(() => {
+//   return tasks.value.length;
+// });
+// const doneCount = computed(() => {
+//   return tasks.value.filter((task) => task.done).length;
+// });
+// const pendingCount = computed(() => {
+//   return tasks.value.filter((task) => !task.done).length;
+// });
 
-function removeTask(id) {
-  tasks.value = tasks.value.filter((task) => {
-    return task.id !== id;
-  });
-}
+// function addTask() {
+//   if (!newTaskName.value.trim()) return;
 
-function toggleTask(id) {
-  const task = tasks.value.find((t) => t.id === id);
-  if (task) {
-    task.isDone = !task.isDone;
-  }
-}
+//   tasks.value.push({
+//     id: taskId.value,
+//     name: newTaskName.value,
+//     isDone: false,
+//     priority: newTaskPriority.value,
+//   });
+//   taskId.value = taskId.value + 1;
+//   newTaskName.value = "";
+// }
 
-function setFilter(newFilterValue) {
-  filter.value = newFilterValue;
-}
+// function removeTask(id) {
+//   tasks.value = tasks.value.filter((task) => {
+//     return task.id !== id;
+//   });
+// }
 
-function clearAllDone() {
-  tasks.value = tasks.value.filter((task) => !task.isDone);
-}
+// function toggleTask(id) {
+//   const task = tasks.value.find((t) => t.id === id);
+//   if (task) {
+//     task.isDone = !task.isDone;
+//   }
+// }
+
+// function setFilter(newFilterValue) {
+//   filter.value = newFilterValue;
+// }
+
+// function clearAllDone() {
+//   tasks.value = tasks.value.filter((task) => !task.done);
+// }
 </script>
 
 <style lang="scss" scoped>
@@ -259,8 +279,6 @@ function clearAllDone() {
         background-color: none;
       }
     }
-
- 
   }
   input {
     border-radius: 0.5rem;
@@ -275,15 +293,15 @@ function clearAllDone() {
   }
 }
 
-   .border-low {
-      border-color: green;
-    }
-    .border-medium {
-      border-color: yellow;
-    }
-    .border-high {
-      border-color: red;
-    }
+.border-low {
+  border-color: green;
+}
+.border-medium {
+  border-color: yellow;
+}
+.border-high {
+  border-color: red;
+}
 
 .stats-container {
   border-style: solid;
