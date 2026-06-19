@@ -8,7 +8,10 @@
       <li :class="{ 'navbar-items': true }" @click="goToTaskListSpecificView">
         Task List Specific View
       </li>
-      <li :class="{ 'navbar-items': true }" @click="logout">
+      <li v-if="!isLoggedIn" :class="{ 'navbar-items': true  }" @click="goToLogin">
+        Login
+      </li>
+      <li v-if="isLoggedIn" :class="{ 'navbar-items': true  }" @click="logout">
         Logout
       </li>
     </ul>
@@ -21,6 +24,7 @@ import { useUserStore } from "../stores/userStore.ts";
 import { storeToRefs } from "pinia";
 
 const userStore = useUserStore();
+const { isLoggedIn } = storeToRefs(userStore);
 const { logout } = userStore;
 
 
@@ -29,6 +33,12 @@ const router = useRouter();
 function goToTaskCounter() {
   router.push("/task-counter");
 }
+
+
+function goToLogin() {
+  router.push("/login");
+}
+
 function goToTaskList() {
   router.push("/task-list");
 }

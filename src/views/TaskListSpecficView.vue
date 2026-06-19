@@ -32,6 +32,7 @@ const showErrorBanner = computed(() => {
     <nav class="page-nav">
       <!-- TODO 3: Add a RouterLink to /about -->
       <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/stats">Stats</RouterLink>
     </nav>
 
 

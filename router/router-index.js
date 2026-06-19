@@ -1,24 +1,46 @@
 import { createWebHistory, createRouter } from "vue-router";
 import { useTaskStore } from "../src/stores/taskStore.js";
+import { useUserStore } from "../src/stores/userStore.ts";
+import { storeToRefs } from "pinia";
 import TaskCounter from "../src/views/TaskCounter.vue";
 import TaskDetailView from "../src/views/TaskDetailView.vue";
 import AboutView from "../src/views/AboutView.vue";
 import TaskListView from "../src/views/TaskListView.vue";
 import TaskListSpecficView from "../src/views/TaskListSpecficView.vue";
 import HomeView from "../src/views/HomeView.vue";
+import LoginDialog from "../src/components/LoginDialog.vue";
+import TodoListView from "../src/views/TodoListView.vue"
+import UserListView from "../src/views/UserListView.vue"
+import Stats from "../src/components/Stats.vue"
 
 const routes = [
   { path: "/", component: HomeView },
+  { path: "/login", component: LoginDialog },
   { path: "/home", component: HomeView },
-  { path: "/task-counter", component: TaskCounter },
-  { path: "/task-list", component: TaskListView },
-  { path: "/task-list-specific-view", component: TaskListSpecficView },
+  {
+    path: "/task-counter",
+    component: TaskCounter,
+    meta: { requiresLogin: true },
+  },
+  {
+    path: "/task-list",
+    component: TaskListView,
+    meta: { requiresLogin: true },
+  },
+  {
+    path: "/task-list-specific-view",
+    component: TaskListSpecficView,
+    meta: { requiresLogin: true },
+  },
   {
     path: "/task/:id",
     component: TaskDetailView,
-    meta: { requiresTask: true },
+    meta: { requiresTask: true, requiresLogin: true },
   },
-  { path: "/about", component: AboutView },
+  { path: "/stats", component: Stats, meta: { requiresLogin: true } },
+  { path: "/about", component: AboutView, meta: { requiresLogin: true } },
+  { path: "/todo-list-view", component: TodoListView, meta: { requiresLogin: true } },
+  { path: "/user-list-view", component: UserListView, meta: { requiresLogin: true } },
 ];
 
 const router = createRouter({
@@ -26,8 +48,21 @@ const router = createRouter({
   routes,
 });
 
+
 router.beforeEach((to, from, next) => {
   const taskStore = useTaskStore();
+  const userStore = useUserStore();
+  const { isLoggedIn } = storeToRefs(userStore);
+
+  if ((to.meta.requiresLogin || from.path === '/login') && !isLoggedIn.value) {
+    next({ path: "/login" })
+    return;
+  }
+
+  if (to.path === '/login' && isLoggedIn.value) {
+    next({ path: "/home" })
+    return;
+  }
   if (to.meta.requiresTask) {
     if (taskStore.tasks.find((t) => t.id === Number(to.params.id))) {
       next();
