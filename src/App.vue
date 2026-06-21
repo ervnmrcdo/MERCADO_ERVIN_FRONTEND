@@ -48,16 +48,17 @@ console.log(currentRoute)
 
 .list-container {
   border-style: solid;
-  padding: 10px 2px;
+  padding: 10px ;
   display: flex;
   margin-left:auto;
   margin-right:auto;
   margin-top: 20px;
-  width: 50%; 
-  height: 10vh;
+  width: fit-content; 
+  height: auto;
   justify-content: center;
   border-radius: 0.5rem;
-  border-width: 2px;;
+  border-width: 2px;
+  z-index: 10;
 }
 
 .links-wrapper{

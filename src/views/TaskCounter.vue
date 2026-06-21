@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <input v-model="usernameInput" type="text" />
-    <button @click="login(usernameInput)">login</button>
-  </div>
   <div v-if="!isLoggedIn" class="login-dialog">
     <LoginDialog />
+  </div>
+<div v-if="isLoggedIn" >
+    
+  <button @click="logout">Logout</button>
   </div>
 
   <div v-if="isLoggedIn" class="todo-container">
@@ -171,7 +171,7 @@ const pendingCount = computed(() => userTasks.value.filter(t => !t.done).length)
 .login-dialog {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 2;
   display: grid;
   place-items: center;
   background: rgba(0, 0, 0, 0.7);
