@@ -54,7 +54,7 @@ console.log(currentRoute)
   margin-right:auto;
   margin-top: 20px;
   width: 50%; 
-  height: 7vh;
+  height: 10vh;
   justify-content: center;
   border-radius: 0.5rem;
   border-width: 2px;;
@@ -70,9 +70,10 @@ console.log(currentRoute)
 .link {
   color: white;
   text-decoration: none;
-  padding: 20px;
+  padding: 10px 15px;
   display: flex;
   justify-content: center;
+  margin: auto;
 }
 
 .active{

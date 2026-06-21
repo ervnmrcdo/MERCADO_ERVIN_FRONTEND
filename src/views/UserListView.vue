@@ -50,16 +50,15 @@ const filteredUsers = computed(() => {
         <!-- TODO 5: Show the content block when NOT loading and NO error -->
         <div v-if="!loading && !error">
             <!-- Filter buttons -->
-            <div class="filters">
-                <input type="textbox">
+            <!-- <div class="filters">
+                <input type="textbox"> -->
 
-            </div>
+            <!-- </div> -->
 
             <!-- TODO 7: Render filteredTodos using v-for -->
             <ul v-for="user in filteredUsers" class="todo-list">
                 <!-- li with checkbox (disabled, reflects todo.completed) and title -->
                 <li>
-                    <span>{{ user.name }}</span>
                     <span>{{ user.name }}</span>
                 </li>
             </ul>
