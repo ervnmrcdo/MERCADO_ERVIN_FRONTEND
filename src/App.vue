@@ -1,51 +1,80 @@
 <script setup>
 import NavBar from "./components/NavBar.vue";
-import { computed } from "vue";
+import { computed, ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 const currentRoute = computed(() => route.fullPath);
+
+const containerRef = ref(null);
+const sliderRef = ref(null);
+
+function updateSlider() {
+  const container = containerRef.value;
+  const slider = sliderRef.value;
+  if (!container || !slider) return;
+
+  const activeLink = container.querySelector(".link.active");
+  if (!activeLink) {
+    slider.style.opacity = "0";
+    return;
+  }
+
+  slider.style.opacity = "1";
+  slider.style.transform = `translateX(${activeLink.offsetLeft}px)`;
+  slider.style.width = `${activeLink.offsetWidth}px`;
+}
+
+onMounted(() => nextTick(updateSlider));
+watch(currentRoute, () => nextTick(updateSlider));
 </script>
 
 <template>
   <main>
     <!-- <NavBar class="navbar"/> -->
-    <div class="list-container">
-      <TransitionGroup class="links-wrapper" name="list" tag="RouterLink">
+    <div class="list-container" ref="containerRef">
+      <TransitionGroup class="links-wrapper" name="list" tag="div">
+        <div class="slider" ref="sliderRef" />
         <RouterLink
           :class="{ active: currentRoute === '/home' }"
           class="link"
           to="/home"
+          key="home"
           >Home</RouterLink
         >
         <RouterLink
           :class="{ active: currentRoute === '/task-counter' }"
           class="link"
           to="/task-counter"
+          key="task-counter"
           >Task Counter</RouterLink
         >
         <RouterLink
           :class="{ active: currentRoute === '/task-list' }"
           class="link"
           to="/task-list"
+          key="task-list"
           >Task List</RouterLink
         >
         <RouterLink
           :class="{ active: currentRoute === '/task-list-specific-view' }"
           class="link"
           to="/task-list-specific-view"
+          key="task-list-specific"
           >Specific</RouterLink
         >
         <RouterLink
           :class="{ active: currentRoute === '/todo-list-view' }"
           class="link"
           to="/todo-list-view"
+          key="todo-list"
           >Todo List</RouterLink
         >
         <RouterLink
           :class="{ active: currentRoute === '/user-list-view' }"
           class="link"
           to="/user-list-view"
+          key="user-list"
           >User List</RouterLink
         >
       </TransitionGroup>
@@ -83,6 +112,7 @@ const currentRoute = computed(() => route.fullPath);
   justify-content: center;
   border-radius: 0.5rem;
   border-width: 2px;
+  position: relative;
   z-index: 10;
 }
 
@@ -91,6 +121,7 @@ const currentRoute = computed(() => route.fullPath);
   justify-content: center;
   justify-items: center;
   gap: 10px;
+  position: relative;
 }
 
 .link {
@@ -100,13 +131,22 @@ const currentRoute = computed(() => route.fullPath);
   display: flex;
   justify-content: center;
   margin: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .active {
+  color: #f0f1ee;
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
   background-color: green;
-  /* padding:10px; */
-  border-style: solid;
-  border-width: 1px;
   border-radius: 1rem;
+  transition: transform 0.3s ease, width 0.3s ease, opacity 0.3s ease;
+  z-index: 0;
 }
 </style>
