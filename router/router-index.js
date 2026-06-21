@@ -52,15 +52,15 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
   const { isLoggedIn } = storeToRefs(userStore);
 
-  if ((to.meta.requiresLogin || from.path === '/login') && !isLoggedIn.value) {
-    next({ path: "/login" })
-    return;
-  }
+  // if ((to.meta.requiresLogin || from.path === '/login') && !isLoggedIn.value) {
+  //   next({ path: "/login" })
+  //   return;
+  // }
 
-  if (to.path === '/login' && isLoggedIn.value) {
-    next({ path: "/home" })
-    return;
-  }
+  // if (to.path === '/login' && isLoggedIn.value) {
+  //   next({ path: "/home" })
+  //   return;
+  // }
   if (to.meta.requiresTask) {
     if (taskStore.tasks.find((t) => t.id === Number(to.params.id))) {
       next();
