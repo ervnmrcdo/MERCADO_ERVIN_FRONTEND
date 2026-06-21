@@ -1,8 +1,8 @@
 <template>
-  <!-- <div>
+  <div>
     <input v-model="usernameInput" type="text" />
     <button @click="login(usernameInput)">login</button>
-  </div> -->
+  </div>
   <div v-if="!isLoggedIn" class="login-dialog">
     <LoginDialog />
   </div>
