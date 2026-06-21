@@ -5,8 +5,9 @@ import {useRoute} from "vue-router"
 
 
 const route = useRoute();
-
 const currentRoute = computed(() => route.path)
+
+console.log(currentRoute)
 
 </script>
 
@@ -15,7 +16,7 @@ const currentRoute = computed(() => route.path)
     <!-- <NavBar class="navbar"/> -->
     <div class="list-container">
     <TransitionGroup  class="links-wrapper" name="list" tag="RouterLink">
-        <RouterLink class="link" to="/home">Home</RouterLink>
+        <RouterLink :class="{'active': true}" class="link" to="/home">Home</RouterLink>
         <RouterLink class="link" to="/task-counter">Task Counter</RouterLink>
         <RouterLink class="link" to="/task-list">Task List</RouterLink>
         <RouterLink class="link" to="/task-list-specific-view">Specific</RouterLink>
@@ -47,24 +48,40 @@ const currentRoute = computed(() => route.path)
 
 .list-container {
   border-style: solid;
-  padding: 20px;
+  padding: 10px 2px;
   display: flex;
   margin-left:auto;
   margin-right:auto;
   margin-top: 20px;
   width: 50%; 
-  height: 10vh;
+  height: 7vh;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border-width: 2px;;
 }
 
 .links-wrapper{
   display: flex;
   justify-content:center;
   justify-items:center;
-  gap:20px;
+  gap:10px;
 }
 
 .link {
   color: white;
   text-decoration: none;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
 }
+
+.active{
+  background-color: green;;
+  /* padding:10px; */
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 1rem;
+  
+}
+
 </style>

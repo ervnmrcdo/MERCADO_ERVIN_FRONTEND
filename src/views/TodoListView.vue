@@ -37,8 +37,8 @@ const filteredTodos = computed(() => {
 
   if (!searchFilteredTasks) return [] // still loading
   if (filter.value === 'all') return searchFilteredTasks.value.slice(0, 20)
-  if (filter.value === 'done') return searchFilteredTasks.filter(todo => todo.completed)
-  if (filter.value === 'pending') return searchFilteredTasks.filter(todo => !todo.completed)
+  if (filter.value === 'done') return searchFilteredTasks.value.filter(todo => todo.completed)
+  if (filter.value === 'pending') return searchFilteredTasks.value.filter(todo => !todo.completed)
   return []
 })
 
