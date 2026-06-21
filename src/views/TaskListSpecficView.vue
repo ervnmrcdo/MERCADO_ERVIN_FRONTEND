@@ -8,16 +8,51 @@
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useTaskStore } from '../stores/taskStore'
+import { useUserStore } from "../stores/userStore.ts";
+import { storeToRefs } from "pinia";
+
+const userStore = useUserStore();
+const { currentUser, usernameInput, userList, isLoggedIn } =
+  storeToRefs(userStore);
+const { login, logout } = userStore;
+
+const taskStore = useTaskStore();
+const {
+  tasks,
+  taskId,
+  newTaskName,
+  newTaskPriority,
+  filter,
+  // doneCount,
+  // totalCount,
+  // pendingCount,
+} = storeToRefs(taskStore);
+const { setFilter, addTask, removeTask, toggleTask, clearAllDone } = taskStore;
 
 
 const route = useRoute();
 
-const taskStore = useTaskStore()
 
 // TODO 1: Read route.query.error — if it equals 'notfound', show a warning banner
 const showErrorBanner = computed(() => {
   if (route.query.error === "notfound") return true;
 });
+
+function filteredTasks(userName) {
+  if (filter.value === "all") {
+    return tasks.value.filter((task) => {
+      return task.by === userName;
+    });
+  } else if (filter.value === "done") {
+    return tasks.value.filter((task) => {
+      return task.done && task.by === userName;
+    });
+  } else {
+    return tasks.value.filter((task) => {
+      return !task.done && task.by === userName;
+    });
+  }
+}
 </script>
 
 <template>
@@ -38,7 +73,7 @@ const showErrorBanner = computed(() => {
 
     <ul class="task-list">
       <!-- <li v-for="task in taskStore.tasks" :key="task.id"> -->
-      <li v-for="task in taskStore.tasks" :key="task.id">
+      <li v-for="task in filteredTasks(currentUser.name)" :key="task.id">
         <RouterLink :to="`/task/${task.id}`">
           <span :class="{ done: task.done }">{{ task.name }}</span>
         </RouterLink>
