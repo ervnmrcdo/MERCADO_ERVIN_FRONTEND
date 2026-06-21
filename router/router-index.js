@@ -25,22 +25,20 @@ const routes = [
   {
     path: "/task-list",
     component: TaskListView,
-    meta: { requiresLogin: true },
   },
   {
     path: "/task-list-specific-view",
     component: TaskListSpecficView,
-    meta: { requiresLogin: true },
   },
   {
     path: "/task/:id",
     component: TaskDetailView,
-    meta: { requiresTask: true, requiresLogin: true },
+    meta: { requiresTask: true, },
   },
-  { path: "/stats", component: Stats, meta: { requiresLogin: true } },
-  { path: "/about", component: AboutView, meta: { requiresLogin: true } },
-  { path: "/todo-list-view", component: TodoListView, meta: { requiresLogin: true } },
-  { path: "/user-list-view", component: UserListView, meta: { requiresLogin: true } },
+  { path: "/stats", component: Stats, },
+  { path: "/about", component: AboutView, },
+  { path: "/todo-list-view", component: TodoListView, },
+  { path: "/user-list-view", component: UserListView, },
 ];
 
 const router = createRouter({

@@ -1,14 +1,20 @@
 <script setup>
-// import HelloWorld from "./components/HelloWorld.vue";
 import NavBar from "./components/NavBar.vue";
-// import TaskCounter from "./components/TaskCounter.vue";
+import {computed} from "vue"
+import {useRoute} from "vue-router"
+
+
+const route = useRoute();
+
+const currentRoute = computed(() => route.path)
+
 </script>
 
 <template>
   <main>
     <!-- <NavBar class="navbar"/> -->
     <div class="list-container">
-      <TransitionGroup>
+    <TransitionGroup  class="links-wrapper" name="list" tag="RouterLink">
         <RouterLink class="link" to="/home">Home</RouterLink>
         <RouterLink class="link" to="/task-counter">Task Counter</RouterLink>
         <RouterLink class="link" to="/task-list">Task List</RouterLink>
@@ -22,10 +28,39 @@ import NavBar from "./components/NavBar.vue";
 </template>
 
 <style>
-.list-container {
-  gap: 5px;
-  border-style: solid;
 
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.list-leave-active {
+  position: absolute;
+}
+
+.list-container {
+  border-style: solid;
+  padding: 20px;
+  display: flex;
+  margin-left:auto;
+  margin-right:auto;
+  margin-top: 20px;
+  width: 50%; 
+  height: 10vh;
+}
+
+.links-wrapper{
+  display: flex;
+  justify-content:center;
+  justify-items:center;
+  gap:20px;
 }
 
 .link {

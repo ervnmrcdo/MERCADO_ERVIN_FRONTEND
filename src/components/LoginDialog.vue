@@ -33,6 +33,6 @@ console.log(currentUser.value);
 }
 
 input {
-  width: 10;
+  // width: 10;
 }
 </style>

@@ -212,9 +212,10 @@ const pendingCount = computed(() => userTasks.value.filter(t => !t.done).length)
 
 .todo-container {
   align-self: center;
-  justify-self: center;
+  margin-left: auto;
+  margin-right:auto;
   display: block;
-  min-width: 70%;
+  width: 60%;
   border-style: solid;
   padding: 40px 3px;
   border-radius: 2rem;
