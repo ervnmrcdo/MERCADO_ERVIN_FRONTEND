@@ -64,9 +64,9 @@ const filteredTodos = computed(() => {
         <!-- TODO 6: Three buttons — All, Done, Pending -->
         <!-- Each sets filter.value and gets :class="{ active: filter === '...' }" -->
         <input type="text" v-model="searchFilter" placeholder="Search here...">
-        <button @click="setFilter('all')">All</button>
-        <button @click="setFilter('done')">Done</button>
-        <button @click="setFilter('pending')">Pending</button>
+        <button @click="setFilter('all')" :class="{'active': filter=== 'all'}">All</button>
+        <button @click="setFilter('done')" :class="{'active': filter=== 'done'}">Done</button>
+        <button @click="setFilter('pending')" :class="{'active': filter=== 'pending'}">Pending</button>
 
 
       </div>
@@ -95,7 +95,7 @@ const filteredTodos = computed(() => {
 
 h1 {
   color: #1B2A4A;
-  margin-bottom: 4px;
+  margin-bottom: 30px;
 }
 
 .subtitle {

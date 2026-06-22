@@ -23,9 +23,6 @@ const {
   newTaskName,
   newTaskPriority,
   filter,
-  // doneCount,
-  // totalCount,
-  // pendingCount,
 } = storeToRefs(taskStore);
 const { setFilter, addTask, removeTask, toggleTask, clearAllDone } = taskStore;
 
@@ -92,6 +89,7 @@ function filteredTasks(userName) {
 h1 {
   color: #1b2a4a;
   margin-bottom: 16px;
+  margin-bottom:30px;
 }
 .error-banner {
   background: #fef3c7;
@@ -104,6 +102,11 @@ h1 {
 }
 .page-nav {
   margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-left: auto;
+  margin-right:auto;
 }
 .page-nav a {
   color: #42b883;
