@@ -32,6 +32,7 @@ export const useTaskStore = defineStore("main", {
         done: false,
         priority: this.newTaskPriority,
         by: userName,
+        dueDate: '03-31-2005'
       });
       this.taskId += 1;
       this.newTaskName = "";

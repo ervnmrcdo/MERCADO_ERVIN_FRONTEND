@@ -55,6 +55,7 @@ function filteredTasks(userName) {
 <template>
   <div class="home-view">
     <h1>📝 My Tasks</h1>
+    
 
     <!-- TODO 2: Show a warning banner if showErrorBanner is true -->
     <div class="error-banner" v-if="showErrorBanner">
@@ -76,6 +77,7 @@ function filteredTasks(userName) {
         </RouterLink>
       </li>
     </ul>
+    <p>Dependent on Task Counter from Day 1 (task-counter)</p>
   </div>
 </template>
 
@@ -117,6 +119,7 @@ h1 {
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-bottom: 30px;
 }
 .task-list li {
   padding: 12px;
@@ -132,5 +135,9 @@ h1 {
 .done {
   text-decoration: line-through;
   color: #9ca3af;
+}
+
+p{
+  text-decoration: underline;
 }
 </style>
